@@ -2,7 +2,7 @@ module GUIgeneric.loadAllSETTA18 where
 
 
 -- this file loads the files containing the code examples in the
--- CPP18 paper, ordered by sections
+-- SETTA18 paper, ordered by sections
 
 -- Abstract
 -- 1. Introduction
