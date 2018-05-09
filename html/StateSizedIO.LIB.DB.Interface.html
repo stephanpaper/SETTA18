@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>StateSizedIO.LIB.DB.Interface</title><link rel="stylesheet" href="Agda.css"></head><body><pre>
+
+
+
+<a id="5" class="Keyword">module</a> <a id="12" href="StateSizedIO.LIB.DB.Interface.html" class="Module">StateSizedIO.LIB.DB.Interface</a> <a id="42" class="Keyword">where</a>
+
+<a id="49" class="Keyword">open</a> <a id="54" class="Keyword">import</a> <a id="61" href="Data.String.Base.html" class="Module">Data.String.Base</a>  <a id="79" class="Keyword">hiding</a> <a id="86" class="Symbol">(</a><a id="87" href="Data.String.Base.html#1371" class="Function">show</a><a id="91" class="Symbol">)</a>
+<a id="93" class="Keyword">open</a> <a id="98" class="Keyword">import</a> <a id="105" href="Data.List.html" class="Module">Data.List</a> <a id="115" class="Keyword">renaming</a> <a id="124" class="Symbol">(</a><a id="125" href="Data.List.Base.html#1391" class="Function Operator">_++_</a> <a id="130" class="Symbol">to</a> <a id="133" href="Data.List.Base.html#1391" class="Function Operator">_++List_</a><a id="141" class="Symbol">)</a>
+<a id="143" class="Keyword">open</a> <a id="148" class="Keyword">import</a> <a id="155" href="Data.List.Categorical.html" class="Module">Data.List.Categorical</a>
+<a id="177" class="Keyword">open</a> <a id="182" class="Keyword">import</a> <a id="189" href="Data.Nat.html" class="Module">Data.Nat</a>
+<a id="198" class="Keyword">open</a> <a id="203" class="Keyword">import</a> <a id="210" href="Data.Nat.Show.html" class="Module">Data.Nat.Show</a>
+<a id="224" class="Keyword">open</a> <a id="229" class="Keyword">import</a> <a id="236" href="Data.Fin.html" class="Module">Data.Fin</a>
+
+<a id="246" class="Keyword">open</a> <a id="251" class="Keyword">import</a> <a id="258" href="StateSizedIO.LIB.HDBC.HDBC.html" class="Module">StateSizedIO.LIB.HDBC.HDBC</a>
+<a id="285" class="Keyword">open</a> <a id="290" class="Keyword">import</a> <a id="297" href="StateSizedIO.LIB.DB.Schema.html" class="Module">StateSizedIO.LIB.DB.Schema</a>
+
+<a id="325" class="Keyword">open</a> <a id="330" class="Keyword">import</a> <a id="337" href="StateSizedIO.LIB.DB.Serialization.html" class="Module">StateSizedIO.LIB.DB.Serialization</a>
+
+
+<a id="373" class="Keyword">open</a> <a id="378" class="Keyword">import</a> <a id="385" href="StateSizedIO.LIB.library.html" class="Module">StateSizedIO.LIB.library</a>
+
+<a id="411" class="Keyword">open</a> <a id="416" class="Keyword">import</a> <a id="423" href="NativeIO.html" class="Module">NativeIO</a> <a id="432" class="Keyword">renaming</a> <a id="441" class="Symbol">(</a><a id="442" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="451" class="Symbol">to</a> <a id="454" href="NativeIO.html#260" class="Postulate">IO</a><a id="456" class="Symbol">;</a> <a id="458" href="NativeIO.html#287" class="Postulate">nativeReturn</a> <a id="471" class="Symbol">to</a> <a id="474" href="NativeIO.html#287" class="Postulate">return</a><a id="480" class="Symbol">;</a> <a id="482" href="NativeIO.html#331" class="Postulate Operator">_native&gt;&gt;=_</a> <a id="494" class="Symbol">to</a> <a id="497" href="NativeIO.html#331" class="Postulate Operator">_&gt;&gt;=_</a><a id="502" class="Symbol">)</a>
+
+
+<a id="insertRows"></a><a id="506" href="StateSizedIO.LIB.DB.Interface.html#506" class="Function">insertRows</a> <a id="517" class="Symbol">:</a> <a id="519" href="StateSizedIO.LIB.HDBC.HDBC.html#3411" class="Postulate">Connection</a> <a id="530" class="Symbol">→</a>
+             <a id="545" class="Symbol">(</a><a id="546" href="StateSizedIO.LIB.DB.Interface.html#546" class="Bound">schema</a> <a id="553" class="Symbol">:</a> <a id="555" href="StateSizedIO.LIB.DB.Schema.html#827" class="Function">Schema</a><a id="561" class="Symbol">)</a> <a id="563" class="Symbol">→</a>
+             <a id="578" class="Symbol">(</a><a id="579" href="StateSizedIO.LIB.DB.Interface.html#579" class="Bound">table</a> <a id="585" class="Symbol">:</a> <a id="587" href="Data.Fin.html#910" class="Datatype">Fin</a> <a id="591" class="Symbol">(</a><a id="592" href="StateSizedIO.LIB.DB.Schema.html#885" class="Function">nrTables</a> <a id="601" href="StateSizedIO.LIB.DB.Interface.html#546" class="Bound">schema</a><a id="607" class="Symbol">))</a> <a id="610" class="Symbol">→</a>
+             <a id="625" href="Agda.Builtin.List.html#80" class="Datatype">List</a> <a id="630" class="Symbol">(</a><a id="631" href="StateSizedIO.LIB.DB.Schema.html#2943" class="Function">Row</a> <a id="635" class="Symbol">(</a><a id="636" href="StateSizedIO.LIB.DB.Schema.html#1895" class="Function">tableFields</a> <a id="648" href="StateSizedIO.LIB.DB.Interface.html#546" class="Bound">schema</a> <a id="655" href="StateSizedIO.LIB.DB.Interface.html#579" class="Bound">table</a><a id="660" class="Symbol">))</a> <a id="663" class="Symbol">→</a>
+             <a id="678" href="NativeIO.html#260" class="Postulate">IO</a> <a id="681" href="Unit.html#28" class="Record">Unit</a>
+
+<a id="687" href="StateSizedIO.LIB.DB.Interface.html#506" class="Function">insertRows</a> <a id="698" href="StateSizedIO.LIB.DB.Interface.html#698" class="Bound">conn</a> <a id="703" href="StateSizedIO.LIB.DB.Interface.html#703" class="Bound">schema</a> <a id="710" href="StateSizedIO.LIB.DB.Interface.html#710" class="Bound">table</a> <a id="716" href="StateSizedIO.LIB.DB.Interface.html#716" class="Bound">xs</a> <a id="719" class="Symbol">=</a>
+  <a id="723" href="StateSizedIO.LIB.HDBC.HDBC.html#5010" class="Postulate">nativePrepare</a> <a id="737" href="StateSizedIO.LIB.DB.Interface.html#698" class="Bound">conn</a> <a id="742" class="Symbol">(</a><a id="743" href="StateSizedIO.LIB.DB.Serialization.html#546" class="Function">insertCommand</a> <a id="757" href="StateSizedIO.LIB.DB.Interface.html#703" class="Bound">schema</a> <a id="764" href="StateSizedIO.LIB.DB.Interface.html#710" class="Bound">table</a><a id="769" class="Symbol">)</a> <a id="771" href="NativeIO.html#331" class="Postulate Operator">&gt;&gt;=</a> <a id="775" class="Symbol">λ</a> <a id="777" href="StateSizedIO.LIB.DB.Interface.html#777" class="Bound">statement</a> <a id="787" class="Symbol">→</a>
+
+  <a id="792" href="Data.List.Categorical.html#1283" class="Function">mapM</a> <a id="797" href="StateSizedIO.LIB.library.html#1512" class="Function">ioMonad</a> <a id="805" class="Symbol">(λ</a> <a id="808" href="StateSizedIO.LIB.DB.Interface.html#808" class="Bound">x</a> <a id="810" class="Symbol">→</a> <a id="812" href="StateSizedIO.LIB.HDBC.HDBC.html#5299" class="Function">nativeExecute</a> <a id="826" href="StateSizedIO.LIB.DB.Interface.html#777" class="Bound">statement</a> <a id="836" class="Symbol">(</a><a id="837" href="StateSizedIO.LIB.DB.Schema.html#3318" class="Function">row2SqlVal</a> <a id="848" href="StateSizedIO.LIB.DB.Interface.html#808" class="Bound">x</a><a id="849" class="Symbol">))</a> <a id="852" href="StateSizedIO.LIB.DB.Interface.html#716" class="Bound">xs</a> <a id="855" href="NativeIO.html#331" class="Postulate Operator">&gt;&gt;=</a> <a id="859" class="Symbol">λ</a> <a id="861" href="StateSizedIO.LIB.DB.Interface.html#861" class="Bound">x</a> <a id="863" class="Symbol">→</a>
+  <a id="867" href="StateSizedIO.LIB.HDBC.HDBC.html#4409" class="Postulate">nativeCommit</a> <a id="880" href="StateSizedIO.LIB.DB.Interface.html#698" class="Bound">conn</a> <a id="885" href="NativeIO.html#331" class="Postulate Operator">&gt;&gt;=</a> <a id="889" class="Symbol">λ</a> <a id="891" href="StateSizedIO.LIB.DB.Interface.html#891" class="Bound">_</a> <a id="893" class="Symbol">→</a>
+  <a id="897" href="NativeIO.html#287" class="Postulate">return</a> <a id="904" class="Symbol">_</a>
+</pre></body></html>

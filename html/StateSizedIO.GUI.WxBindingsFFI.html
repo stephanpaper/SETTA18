@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>StateSizedIO.GUI.WxBindingsFFI</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Keyword">module</a> <a id="8" href="StateSizedIO.GUI.WxBindingsFFI.html" class="Module">StateSizedIO.GUI.WxBindingsFFI</a> <a id="39" class="Keyword">where</a>
+
+<a id="46" class="Keyword">open</a> <a id="51" class="Keyword">import</a> <a id="58" href="Data.Bool.Base.html" class="Module">Data.Bool.Base</a>
+<a id="73" class="Keyword">open</a> <a id="78" class="Keyword">import</a> <a id="85" href="Data.Integer.html" class="Module">Data.Integer</a>
+<a id="98" class="Keyword">open</a> <a id="103" class="Keyword">import</a> <a id="110" href="Data.Nat.html" class="Module">Data.Nat</a>
+
+<a id="120" class="Keyword">open</a> <a id="125" class="Keyword">import</a> <a id="132" href="Data.Product.html" class="Module">Data.Product</a> <a id="145" class="Keyword">hiding</a> <a id="152" class="Symbol">(</a><a id="153" href="Data.Product.html#2128" class="Function">map</a><a id="156" class="Symbol">)</a>
+
+<a id="159" class="Keyword">open</a> <a id="164" class="Keyword">import</a> <a id="171" href="NativeIO.html" class="Module">NativeIO</a>
+
+
+
+<a id="183" class="Symbol">{-#</a> <a id="187" class="Keyword">FOREIGN</a> GHC import qualified GHC.Conc.Sync <a id="230" class="Symbol">#-}</a>
+<a id="234" class="Symbol">{-#</a> <a id="238" class="Keyword">FOREIGN</a> GHC import qualified Control.Concurrent <a id="286" class="Symbol">#-}</a>
+<a id="290" class="Symbol">{-#</a> <a id="294" class="Keyword">FOREIGN</a> GHC import qualified Control.Concurrent.STM.TVar <a id="351" class="Symbol">#-}</a>
+
+
+<a id="357" class="Symbol">{-#</a> <a id="361" class="Keyword">FOREIGN</a> GHC import qualified Data.IORef <a id="401" class="Symbol">#-}</a>
+
+<a id="406" class="Symbol">{-#</a> <a id="410" class="Keyword">FOREIGN</a> GHC import qualified Graphics.UI.WX <a id="454" class="Symbol">#-}</a>
+<a id="458" class="Symbol">{-#</a> <a id="462" class="Keyword">FOREIGN</a> GHC import qualified Graphics.UI.WX.Timer <a id="512" class="Symbol">#-}</a>
+<a id="516" class="Symbol">{-#</a> <a id="520" class="Keyword">FOREIGN</a> GHC import qualified Graphics.UI.WXCore <a id="568" class="Symbol">#-}</a>
+<a id="572" class="Symbol">{-#</a> <a id="576" class="Keyword">FOREIGN</a> GHC import qualified Graphics.UI.WXCore.Events <a id="631" class="Symbol">#-}</a>
+
+
+
+
+
+<a id="640" class="Keyword">postulate</a> <a id="Frame"></a><a id="650" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> <a id="656" class="Symbol">:</a> <a id="658" class="PrimitiveType">Set</a>
+<a id="662" class="Symbol">{-#</a> <a id="666" class="Keyword">COMPILE</a> GHC <a id="678" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> = type (Graphics.UI.WX.Frame ()) <a id="717" class="Symbol">#-}</a>
+
+
+
+<a id="724" class="Keyword">postulate</a> <a id="Button"></a><a id="734" href="StateSizedIO.GUI.WxBindingsFFI.html#734" class="Postulate">Button</a> <a id="741" class="Symbol">:</a> <a id="743" class="PrimitiveType">Set</a>
+<a id="747" class="Symbol">{-#</a> <a id="751" class="Keyword">COMPILE</a> GHC <a id="763" href="StateSizedIO.GUI.WxBindingsFFI.html#734" class="Postulate">Button</a> = type (Graphics.UI.WX.Button ()) <a id="804" class="Symbol">#-}</a>
+
+<a id="809" class="Keyword">postulate</a> <a id="TextCtrl"></a><a id="819" href="StateSizedIO.GUI.WxBindingsFFI.html#819" class="Postulate">TextCtrl</a> <a id="828" class="Symbol">:</a> <a id="830" class="PrimitiveType">Set</a>
+<a id="834" class="Symbol">{-#</a> <a id="838" class="Keyword">COMPILE</a> GHC <a id="850" href="StateSizedIO.GUI.WxBindingsFFI.html#819" class="Postulate">TextCtrl</a> = type (Graphics.UI.WX.TextCtrl ()) <a id="895" class="Symbol">#-}</a>
+
+<a id="900" class="Keyword">postulate</a> <a id="Timer"></a><a id="910" href="StateSizedIO.GUI.WxBindingsFFI.html#910" class="Postulate">Timer</a> <a id="916" class="Symbol">:</a> <a id="918" class="PrimitiveType">Set</a>
+<a id="922" class="Symbol">{-#</a> <a id="926" class="Keyword">COMPILE</a> GHC <a id="938" href="StateSizedIO.GUI.WxBindingsFFI.html#910" class="Postulate">Timer</a> = type Graphics.UI.WX.Timer.Timer <a id="978" class="Symbol">#-}</a>
+
+
+<a id="984" class="Keyword">postulate</a> <a id="nativeNewFrame"></a><a id="994" href="StateSizedIO.GUI.WxBindingsFFI.html#994" class="Postulate">nativeNewFrame</a> <a id="1009" class="Symbol">:</a> <a id="1011" href="Agda.Builtin.String.html#165" class="Postulate">String</a> <a id="1018" class="Symbol">-&gt;</a> <a id="1021" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="1030" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a>
+<a id="1036" class="Symbol">{-#</a> <a id="1040" class="Keyword">COMPILE</a> GHC <a id="1052" href="StateSizedIO.GUI.WxBindingsFFI.html#994" class="Postulate">nativeNewFrame</a> = (\s -&gt; Graphics.UI.WX.frame [Graphics.UI.WX.text Graphics.UI.WX.:= &quot;Window&quot;]) <a id="1147" class="Symbol">#-}</a>
+
+
+<a id="1153" class="Comment">--</a>
+<a id="1156" class="Comment">-- Frame Layout</a>
+<a id="1172" class="Comment">--</a>
+<a id="1175" class="Symbol">{-#</a> <a id="1179" class="Keyword">FOREIGN</a> GHC
+setChildrenLayout&#39; ::   Graphics.UI.WX.Frame () -&gt; Integer -&gt; Integer -&gt; Integer -&gt; Integer -&gt; IO ()
+setChildrenLayout&#39; win rowWidth&#39; marginWidth&#39; vspa&#39; hspa&#39; = exec
+
+  let rowWidth = fromIntegral rowWidth&#39;
+  let marginWidth = fromIntegral marginWidth&#39;
+  let vspa = fromIntegral vspa&#39;
+  let hspa = fromIntegral hspa&#39;
+
+  let list2Matrix n xs = map (\(x ,y)-&gt; (take n) $ (drop (n*x)) y) $ zip [0..] $ replicate (div (length xs)  n) xs
+
+  blist &lt;- Graphics.UI.WXCore.windowChildren win
+  putStrLn (&quot;Layout of frame, got &quot; ++ (show $ length $ blist) ++ &quot;children&quot;)
+
+  let  blist&#39; = list2Matrix rowWidth blist
+  let  blist&#39;&#39; = (map . map) Graphics.UI.WX.widget blist&#39;
+
+  Graphics.UI.WX.set win [ Graphics.UI.WX.layout Graphics.UI.WX.:= Graphics.UI.WX.margin marginWidth $ Graphics.UI.WX.dynamic $ Graphics.UI.WX.grid vspa hspa $ blist&#39;&#39;]
+
+
+
+<a id="2027" class="Symbol">#-}</a>
+
+
+
+<a id="2034" class="Keyword">postulate</a> <a id="nativeSetChildredLayout"></a><a id="2044" href="StateSizedIO.GUI.WxBindingsFFI.html#2044" class="Postulate">nativeSetChildredLayout</a> <a id="2068" class="Symbol">:</a> <a id="2070" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> <a id="2076" class="Symbol">→</a> <a id="2078" href="Agda.Builtin.Nat.html#97" class="Datatype">ℕ</a> <a id="2080" class="Symbol">→</a> <a id="2082" href="Agda.Builtin.Nat.html#97" class="Datatype">ℕ</a> <a id="2084" class="Symbol">→</a> <a id="2086" href="Agda.Builtin.Nat.html#97" class="Datatype">ℕ</a> <a id="2088" class="Symbol">→</a> <a id="2090" href="Agda.Builtin.Nat.html#97" class="Datatype">ℕ</a> <a id="2092" class="Symbol">→</a> <a id="2094" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="2103" href="Unit.html#28" class="Record">Unit</a>
+<a id="2108" class="Symbol">{-#</a> <a id="2112" class="Keyword">COMPILE</a> GHC <a id="2124" href="StateSizedIO.GUI.WxBindingsFFI.html#2044" class="Postulate">nativeSetChildredLayout</a> = setChildrenLayout&#39; <a id="2169" class="Symbol">#-}</a>
+
+<a id="2174" class="Keyword">postulate</a> <a id="nativeDoThreadDelay"></a><a id="2184" href="StateSizedIO.GUI.WxBindingsFFI.html#2184" class="Postulate">nativeDoThreadDelay</a> <a id="2204" class="Symbol">:</a> <a id="2206" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="2215" href="Agda.Builtin.Bool.html#67" class="Datatype">Bool</a>
+<a id="2220" class="Symbol">{-#</a> <a id="2224" class="Keyword">COMPILE</a> GHC <a id="2236" href="StateSizedIO.GUI.WxBindingsFFI.html#2184" class="Postulate">nativeDoThreadDelay</a> = ((Control.Concurrent.threadDelay 100) &gt;&gt;= (\x -&gt; return True)) <a id="2321" class="Symbol">#-}</a>
+
+
+<a id="2327" class="Keyword">postulate</a> <a id="nativeSetIdle"></a><a id="2337" href="StateSizedIO.GUI.WxBindingsFFI.html#2337" class="Postulate">nativeSetIdle</a> <a id="2351" class="Symbol">:</a> <a id="2353" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> <a id="2359" class="Symbol">-&gt;</a> <a id="2362" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="2371" href="Agda.Builtin.Bool.html#67" class="Datatype">Bool</a> <a id="2376" class="Symbol">-&gt;</a> <a id="2379" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="2388" href="Unit.html#28" class="Record">Unit</a>
+<a id="2393" class="Symbol">{-#</a> <a id="2397" class="Keyword">COMPILE</a> GHC <a id="2409" href="StateSizedIO.GUI.WxBindingsFFI.html#2337" class="Postulate">nativeSetIdle</a> = (\fra prog -&gt; Graphics.UI.WX.set fra [Graphics.UI.WX.on Graphics.UI.WX.idle Graphics.UI.WX.:= prog]) <a id="2526" class="Symbol">#-}</a>
+
+
+<a id="nativeCreateFrame"></a><a id="2532" href="StateSizedIO.GUI.WxBindingsFFI.html#2532" class="Function">nativeCreateFrame</a> <a id="2550" class="Symbol">:</a> <a id="2552" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="2561" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a>
+<a id="2567" href="StateSizedIO.GUI.WxBindingsFFI.html#2532" class="Function">nativeCreateFrame</a> <a id="2585" class="Symbol">=</a>
+  <a id="2589" href="StateSizedIO.GUI.WxBindingsFFI.html#994" class="Postulate">nativeNewFrame</a> <a id="2604" class="String">&quot;Start Text&quot;</a> <a id="2617" href="NativeIO.html#331" class="Postulate Operator">native&gt;&gt;=</a> <a id="2627" class="Symbol">(\</a><a id="2629" href="StateSizedIO.GUI.WxBindingsFFI.html#2629" class="Bound">f</a> <a id="2631" class="Symbol">-&gt;</a>
+  <a id="2636" href="StateSizedIO.GUI.WxBindingsFFI.html#2337" class="Postulate">nativeSetIdle</a> <a id="2650" href="StateSizedIO.GUI.WxBindingsFFI.html#2629" class="Bound">f</a> <a id="2652" href="StateSizedIO.GUI.WxBindingsFFI.html#2184" class="Postulate">nativeDoThreadDelay</a> <a id="2672" href="NativeIO.html#331" class="Postulate Operator">native&gt;&gt;=</a> <a id="2682" class="Symbol">(\</a><a id="2684" href="StateSizedIO.GUI.WxBindingsFFI.html#2684" class="Bound">x</a> <a id="2686" class="Symbol">-&gt;</a>
+  <a id="2691" href="NativeIO.html#287" class="Postulate">nativeReturn</a> <a id="2704" href="StateSizedIO.GUI.WxBindingsFFI.html#2629" class="Bound">f</a><a id="2705" class="Symbol">))</a>
+
+<a id="2709" class="Keyword">postulate</a> <a id="nativeMakeButton"></a><a id="2719" href="StateSizedIO.GUI.WxBindingsFFI.html#2719" class="Postulate">nativeMakeButton</a> <a id="2736" class="Symbol">:</a> <a id="2738" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> <a id="2744" class="Symbol">→</a> <a id="2746" href="Agda.Builtin.String.html#165" class="Postulate">String</a> <a id="2753" class="Symbol">→</a> <a id="2755" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="2764" href="StateSizedIO.GUI.WxBindingsFFI.html#734" class="Postulate">Button</a>
+<a id="2771" class="Symbol">{-#</a> <a id="2775" class="Keyword">COMPILE</a> GHC <a id="2787" href="StateSizedIO.GUI.WxBindingsFFI.html#2719" class="Postulate">nativeMakeButton</a> = (\myFrame str -&gt; Graphics.UI.WX.button myFrame [Graphics.UI.WX.text Graphics.UI.WX.:= (Data.Text.unpack str)]) <a id="2917" class="Symbol">#-}</a>
+
+<a id="2922" class="Keyword">postulate</a> <a id="nativeMakeTextCtrl"></a><a id="2932" href="StateSizedIO.GUI.WxBindingsFFI.html#2932" class="Postulate">nativeMakeTextCtrl</a> <a id="2951" class="Symbol">:</a> <a id="2953" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a>  <a id="2960" class="Symbol">→</a> <a id="2962" href="Agda.Builtin.String.html#165" class="Postulate">String</a> <a id="2969" class="Symbol">→</a> <a id="2971" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="2980" href="StateSizedIO.GUI.WxBindingsFFI.html#819" class="Postulate">TextCtrl</a>
+<a id="2989" class="Symbol">{-#</a> <a id="2993" class="Keyword">COMPILE</a> GHC <a id="3005" href="StateSizedIO.GUI.WxBindingsFFI.html#2932" class="Postulate">nativeMakeTextCtrl</a> = (\myFrame str -&gt; Graphics.UI.WX.entry myFrame [Graphics.UI.WX.text Graphics.UI.WX.:= (Data.Text.unpack str)]) <a id="3136" class="Symbol">#-}</a>
+
+<a id="3141" class="Keyword">postulate</a> <a id="nativeAddButton"></a><a id="3151" href="StateSizedIO.GUI.WxBindingsFFI.html#3151" class="Postulate">nativeAddButton</a> <a id="3167" class="Symbol">:</a> <a id="3169" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> <a id="3175" class="Symbol">→</a> <a id="3177" href="StateSizedIO.GUI.WxBindingsFFI.html#734" class="Postulate">Button</a> <a id="3184" class="Symbol">→</a> <a id="3186" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="3195" href="Unit.html#28" class="Record">Unit</a>
+<a id="3200" class="Symbol">{-#</a> <a id="3204" class="Keyword">COMPILE</a> GHC <a id="3216" href="StateSizedIO.GUI.WxBindingsFFI.html#3151" class="Postulate">nativeAddButton</a> = (\myFrame bt -&gt; Graphics.UI.WX.set myFrame [Graphics.UI.WX.layout Graphics.UI.WX.:= Graphics.UI.WX.minsize (Graphics.UI.WX.sz 500 400) $ Graphics.UI.WX.column 1 [Graphics.UI.WX.hfill (Graphics.UI.WX.widget bt)]]) <a id="3447" class="Symbol">#-}</a>
+
+
+
+<a id="3454" class="Keyword">postulate</a> <a id="WxColor"></a><a id="3464" href="StateSizedIO.GUI.WxBindingsFFI.html#3464" class="Postulate">WxColor</a> <a id="3472" class="Symbol">:</a> <a id="3474" class="PrimitiveType">Set</a>
+<a id="3478" class="Symbol">{-#</a> <a id="3482" class="Keyword">COMPILE</a> GHC <a id="3494" href="StateSizedIO.GUI.WxBindingsFFI.html#3464" class="Postulate">WxColor</a> = type Graphics.UI.WX.Color <a id="3530" class="Symbol">#-}</a>
+
+<a id="3535" class="Keyword">postulate</a> <a id="nativeSetColorButton"></a><a id="3545" href="StateSizedIO.GUI.WxBindingsFFI.html#3545" class="Postulate">nativeSetColorButton</a> <a id="3566" class="Symbol">:</a> <a id="3568" href="StateSizedIO.GUI.WxBindingsFFI.html#734" class="Postulate">Button</a> <a id="3575" class="Symbol">→</a> <a id="3577" href="StateSizedIO.GUI.WxBindingsFFI.html#3464" class="Postulate">WxColor</a> <a id="3585" class="Symbol">→</a> <a id="3587" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="3596" href="Unit.html#28" class="Record">Unit</a>
+<a id="3601" class="Symbol">{-#</a> <a id="3605" class="Keyword">COMPILE</a> GHC  <a id="3618" href="StateSizedIO.GUI.WxBindingsFFI.html#3545" class="Postulate">nativeSetColorButton</a> = (\ bt co -&gt; Graphics.UI.WX.set bt [ Graphics.UI.WX.color Graphics.UI.WX.:= co] ) <a id="3722" class="Symbol">#-}</a>
+
+<a id="3727" class="Keyword">postulate</a> <a id="nativeSetColorTextCtrl"></a><a id="3737" href="StateSizedIO.GUI.WxBindingsFFI.html#3737" class="Postulate">nativeSetColorTextCtrl</a> <a id="3760" class="Symbol">:</a> <a id="3762" href="StateSizedIO.GUI.WxBindingsFFI.html#819" class="Postulate">TextCtrl</a> <a id="3771" class="Symbol">→</a> <a id="3773" href="StateSizedIO.GUI.WxBindingsFFI.html#3464" class="Postulate">WxColor</a> <a id="3781" class="Symbol">→</a> <a id="3783" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="3792" href="Unit.html#28" class="Record">Unit</a>
+<a id="3797" class="Symbol">{-#</a> <a id="3801" class="Keyword">COMPILE</a> GHC  <a id="3814" href="StateSizedIO.GUI.WxBindingsFFI.html#3737" class="Postulate">nativeSetColorTextCtrl</a> = (\ txt co -&gt; Graphics.UI.WX.set txt [ Graphics.UI.WX.color Graphics.UI.WX.:= co] ) <a id="3922" class="Symbol">#-}</a>
+
+<a id="3927" class="Keyword">postulate</a> <a id="nativeGetTextFromTxtBox"></a><a id="3937" href="StateSizedIO.GUI.WxBindingsFFI.html#3937" class="Postulate">nativeGetTextFromTxtBox</a> <a id="3961" class="Symbol">:</a> <a id="3963" href="StateSizedIO.GUI.WxBindingsFFI.html#819" class="Postulate">TextCtrl</a> <a id="3972" class="Symbol">→</a> <a id="3974" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="3983" href="Agda.Builtin.String.html#165" class="Postulate">String</a>
+<a id="3990" class="Symbol">{-#</a> <a id="3994" class="Keyword">COMPILE</a> GHC  <a id="4007" href="StateSizedIO.GUI.WxBindingsFFI.html#3937" class="Postulate">nativeGetTextFromTxtBox</a> = (\ txt -&gt; (Graphics.UI.WX.get txt Graphics.UI.WX.text) &gt;&gt;= (\s -&gt; return (Data.Text.pack s))) <a id="4127" class="Symbol">#-}</a>
+
+<a id="4132" class="Keyword">postulate</a> <a id="rgb"></a><a id="4142" href="StateSizedIO.GUI.WxBindingsFFI.html#4142" class="Postulate">rgb</a> <a id="4146" class="Symbol">:</a> <a id="4148" href="Agda.Builtin.Nat.html#97" class="Datatype">ℕ</a> <a id="4150" class="Symbol">→</a> <a id="4152" href="Agda.Builtin.Nat.html#97" class="Datatype">ℕ</a> <a id="4154" class="Symbol">→</a> <a id="4156" href="Agda.Builtin.Nat.html#97" class="Datatype">ℕ</a> <a id="4158" class="Symbol">→</a> <a id="4160" href="StateSizedIO.GUI.WxBindingsFFI.html#3464" class="Postulate">WxColor</a>
+<a id="4168" class="Symbol">{-#</a> <a id="4172" class="Keyword">COMPILE</a> GHC <a id="4184" href="StateSizedIO.GUI.WxBindingsFFI.html#4142" class="Postulate">rgb</a> = (\ r b g -&gt; Graphics.UI.WX.rgb r g b) <a id="4228" class="Symbol">#-}</a>
+
+
+<a id="4234" class="Keyword">postulate</a>  <a id="TVar"></a><a id="4245" href="StateSizedIO.GUI.WxBindingsFFI.html#4245" class="Postulate">TVar</a> <a id="4250" class="Symbol">:</a> <a id="4252" class="PrimitiveType">Set</a> <a id="4256" class="Symbol">→</a> <a id="4258" class="PrimitiveType">Set</a>
+<a id="4262" class="Symbol">{-#</a> <a id="4266" class="Keyword">COMPILE</a> GHC <a id="4278" href="StateSizedIO.GUI.WxBindingsFFI.html#4245" class="Postulate">TVar</a> = type Control.Concurrent.STM.TVar.TVar <a id="4323" class="Symbol">#-}</a>
+
+<a id="4328" class="Keyword">postulate</a>  <a id="MVar"></a><a id="4339" href="StateSizedIO.GUI.WxBindingsFFI.html#4339" class="Postulate">MVar</a> <a id="4344" class="Symbol">:</a> <a id="4346" class="PrimitiveType">Set</a> <a id="4350" class="Symbol">→</a> <a id="4352" class="PrimitiveType">Set</a>
+<a id="4356" class="Symbol">{-#</a> <a id="4360" class="Keyword">COMPILE</a> GHC <a id="4372" href="StateSizedIO.GUI.WxBindingsFFI.html#4339" class="Postulate">MVar</a> = type Control.Concurrent.MVar <a id="4408" class="Symbol">#-}</a>
+
+<a id="Var"></a><a id="4413" href="StateSizedIO.GUI.WxBindingsFFI.html#4413" class="Function">Var</a> <a id="4417" class="Symbol">:</a> <a id="4419" class="PrimitiveType">Set</a> <a id="4423" class="Symbol">→</a> <a id="4425" class="PrimitiveType">Set</a>
+<a id="4429" href="StateSizedIO.GUI.WxBindingsFFI.html#4413" class="Function">Var</a> <a id="4433" class="Symbol">=</a> <a id="4435" href="StateSizedIO.GUI.WxBindingsFFI.html#4339" class="Postulate">MVar</a>
+
+
+
+<a id="4443" class="Keyword">postulate</a>
+  <a id="nativeNewVar"></a><a id="4455" href="StateSizedIO.GUI.WxBindingsFFI.html#4455" class="Postulate">nativeNewVar</a> <a id="4468" class="Symbol">:</a> <a id="4470" class="Symbol">{</a><a id="4471" href="StateSizedIO.GUI.WxBindingsFFI.html#4471" class="Bound">A</a> <a id="4473" class="Symbol">:</a> <a id="4475" class="PrimitiveType">Set</a><a id="4478" class="Symbol">}</a> <a id="4480" class="Symbol">→</a> <a id="4482" href="StateSizedIO.GUI.WxBindingsFFI.html#4471" class="Bound">A</a> <a id="4484" class="Symbol">→</a> <a id="4486" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="4495" class="Symbol">(</a><a id="4496" href="StateSizedIO.GUI.WxBindingsFFI.html#4413" class="Function">Var</a> <a id="4500" href="StateSizedIO.GUI.WxBindingsFFI.html#4471" class="Bound">A</a><a id="4501" class="Symbol">)</a>
+  <a id="nativeTakeVar"></a><a id="4505" href="StateSizedIO.GUI.WxBindingsFFI.html#4505" class="Postulate">nativeTakeVar</a> <a id="4519" class="Symbol">:</a> <a id="4521" class="Symbol">{</a><a id="4522" href="StateSizedIO.GUI.WxBindingsFFI.html#4522" class="Bound">A</a> <a id="4524" class="Symbol">:</a> <a id="4526" class="PrimitiveType">Set</a><a id="4529" class="Symbol">}</a> <a id="4531" class="Symbol">→</a> <a id="4533" href="StateSizedIO.GUI.WxBindingsFFI.html#4413" class="Function">Var</a> <a id="4537" href="StateSizedIO.GUI.WxBindingsFFI.html#4522" class="Bound">A</a> <a id="4539" class="Symbol">→</a> <a id="4541" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="4550" href="StateSizedIO.GUI.WxBindingsFFI.html#4522" class="Bound">A</a>
+  <a id="nativePutVar"></a><a id="4554" href="StateSizedIO.GUI.WxBindingsFFI.html#4554" class="Postulate">nativePutVar</a> <a id="4567" class="Symbol">:</a> <a id="4569" class="Symbol">{</a><a id="4570" href="StateSizedIO.GUI.WxBindingsFFI.html#4570" class="Bound">A</a> <a id="4572" class="Symbol">:</a> <a id="4574" class="PrimitiveType">Set</a><a id="4577" class="Symbol">}</a> <a id="4579" class="Symbol">→</a> <a id="4581" href="StateSizedIO.GUI.WxBindingsFFI.html#4413" class="Function">Var</a> <a id="4585" href="StateSizedIO.GUI.WxBindingsFFI.html#4570" class="Bound">A</a> <a id="4587" class="Symbol">→</a> <a id="4589" href="StateSizedIO.GUI.WxBindingsFFI.html#4570" class="Bound">A</a> <a id="4591" class="Symbol">→</a> <a id="4593" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="4602" href="Unit.html#28" class="Record">Unit</a>
+
+<a id="4608" class="Symbol">{-#</a> <a id="4612" class="Keyword">COMPILE</a> GHC <a id="4624" href="StateSizedIO.GUI.WxBindingsFFI.html#4455" class="Postulate">nativeNewVar</a> = (\ _ -&gt; Control.Concurrent.newMVar ) <a id="4676" class="Symbol">#-}</a>
+<a id="4680" class="Symbol">{-#</a> <a id="4684" class="Keyword">COMPILE</a> GHC <a id="4696" href="StateSizedIO.GUI.WxBindingsFFI.html#4505" class="Postulate">nativeTakeVar</a> = (\ _ -&gt; Control.Concurrent.takeMVar ) <a id="4750" class="Symbol">#-}</a>
+<a id="4754" class="Symbol">{-#</a> <a id="4758" class="Keyword">COMPILE</a> GHC <a id="4770" href="StateSizedIO.GUI.WxBindingsFFI.html#4554" class="Postulate">nativePutVar</a> = (\ _ -&gt; Control.Concurrent.putMVar ) <a id="4822" class="Symbol">#-}</a>
+
+
+
+<a id="4829" class="Comment">-- Fire Custom Event</a>
+<a id="4850" class="Comment">--</a>
+<a id="4853" class="Keyword">postulate</a> <a id="nativeFireCustomEvent"></a><a id="4863" href="StateSizedIO.GUI.WxBindingsFFI.html#4863" class="Postulate">nativeFireCustomEvent</a> <a id="4885" class="Symbol">:</a> <a id="4887" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> <a id="4893" class="Symbol">→</a> <a id="4895" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="4904" href="Unit.html#28" class="Record">Unit</a>
+<a id="4909" class="Symbol">{-#</a> <a id="4913" class="Keyword">COMPILE</a> GHC <a id="4925" href="StateSizedIO.GUI.WxBindingsFFI.html#4863" class="Postulate">nativeFireCustomEvent</a> = (\f -&gt; Graphics.UI.WXCore.commandEventCreate Graphics.UI.WXCore.wxEVT_COMMAND_MENU_SELECTED (Graphics.UI.WXCore.wxID_HIGHEST+1) &gt;&gt;= (\ev -&gt; fmap (\x -&gt; ()) (Graphics.UI.WXCore.evtHandlerProcessEvent f ev))) <a id="5156" class="Symbol">#-}</a>
+
+
+
+<a id="5163" class="Keyword">postulate</a> <a id="nativeRegisterCustomEvent"></a><a id="5173" href="StateSizedIO.GUI.WxBindingsFFI.html#5173" class="Postulate">nativeRegisterCustomEvent</a> <a id="5199" class="Symbol">:</a> <a id="5201" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> <a id="5207" class="Symbol">→</a> <a id="5209" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="5218" href="Unit.html#28" class="Record">Unit</a> <a id="5223" class="Symbol">→</a> <a id="5225" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="5234" href="Unit.html#28" class="Record">Unit</a>
+<a id="5239" class="Symbol">{-#</a> <a id="5243" class="Keyword">COMPILE</a> GHC <a id="5255" href="StateSizedIO.GUI.WxBindingsFFI.html#5173" class="Postulate">nativeRegisterCustomEvent</a> = (\win prog -&gt; Graphics.UI.WXCore.evtHandlerOnMenuCommand win (Graphics.UI.WXCore.wxID_HIGHEST+1) (putStrLn &quot; &gt;&gt;&gt; CUSTOM EVENT FIRED &lt;&lt;&lt;&quot; &gt;&gt; Control.Concurrent.forkIO prog &gt;&gt; return ())) <a id="5469" class="Symbol">#-}</a>
+
+
+<a id="5475" class="Comment">{-
+for debugging
+postulate nativeRegisterDummyCustomEvent : Frame → NativeIO Unit
+{-# COMPILE GHC nativeRegisterDummyCustomEvent = (\win -&gt; Graphics.UI.WXCore.evtHandlerOnMenuCommand win (Graphics.UI.WXCore.wxID_HIGHEST+1) (putStrLn &quot; &gt;&gt;&gt; CUSTOM EVENT FIRED &lt;&lt;&lt;&quot;)) #-}
+-}</a>
+
+<a id="5748" class="Keyword">postulate</a> <a id="nativeSetButtonHandler"></a><a id="5758" href="StateSizedIO.GUI.WxBindingsFFI.html#5758" class="Postulate">nativeSetButtonHandler</a> <a id="5781" class="Symbol">:</a> <a id="5783" href="StateSizedIO.GUI.WxBindingsFFI.html#734" class="Postulate">Button</a> <a id="5790" class="Symbol">→</a> <a id="5792" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="5801" href="Unit.html#28" class="Record">Unit</a> <a id="5806" class="Symbol">→</a> <a id="5808" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="5817" href="Unit.html#28" class="Record">Unit</a>
+<a id="5822" class="Symbol">{-#</a> <a id="5826" class="Keyword">COMPILE</a> GHC <a id="5838" href="StateSizedIO.GUI.WxBindingsFFI.html#5758" class="Postulate">nativeSetButtonHandler</a> = (\ bt prog -&gt; Graphics.UI.WX.set bt [Graphics.UI.WX.on Graphics.UI.WX.command Graphics.UI.WX.:= prog ]) <a id="5967" class="Symbol">#-}</a>
+
+<a id="5972" class="Keyword">postulate</a> <a id="prog"></a><a id="5982" href="StateSizedIO.GUI.WxBindingsFFI.html#5982" class="Postulate">prog</a> <a id="5987" class="Symbol">:</a> <a id="5989" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="5998" href="Unit.html#28" class="Record">Unit</a>
+<a id="6003" class="Symbol">{-#</a> <a id="6007" class="Keyword">COMPILE</a> GHC <a id="6019" href="StateSizedIO.GUI.WxBindingsFFI.html#5982" class="Postulate">prog</a> = (putStrLn &quot;timer goes off!&quot;) <a id="6055" class="Symbol">#-}</a>
+
+<a id="6060" class="Keyword">postulate</a> <a id="nativeSetTimer"></a><a id="6070" href="StateSizedIO.GUI.WxBindingsFFI.html#6070" class="Postulate">nativeSetTimer</a> <a id="6085" class="Symbol">:</a> <a id="6087" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> <a id="6093" class="Symbol">→</a> <a id="6095" href="Agda.Builtin.Int.html#178" class="Datatype">ℤ</a> <a id="6097" class="Symbol">→</a> <a id="6099" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="6108" href="Unit.html#28" class="Record">Unit</a> <a id="6113" class="Symbol">→</a> <a id="6115" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="6124" href="StateSizedIO.GUI.WxBindingsFFI.html#910" class="Postulate">Timer</a>
+<a id="6130" class="Symbol">{-#</a> <a id="6134" class="Keyword">COMPILE</a> GHC <a id="6146" href="StateSizedIO.GUI.WxBindingsFFI.html#6070" class="Postulate">nativeSetTimer</a> = (\ fra x prog -&gt; Graphics.UI.WX.timer fra [ Graphics.UI.WX.interval Graphics.UI.WX.:= (fromInteger x) , Graphics.UI.WX.on Graphics.UI.WX.command Graphics.UI.WX.:= prog ]) <a id="6334" class="Symbol">#-}</a>
+
+<a id="6339" class="Keyword">postulate</a> <a id="ThreadId"></a><a id="6349" href="StateSizedIO.GUI.WxBindingsFFI.html#6349" class="Postulate">ThreadId</a> <a id="6358" class="Symbol">:</a> <a id="6360" class="PrimitiveType">Set</a>
+<a id="6364" class="Symbol">{-#</a> <a id="6368" class="Keyword">COMPILE</a> GHC <a id="6380" href="StateSizedIO.GUI.WxBindingsFFI.html#6349" class="Postulate">ThreadId</a> = type GHC.Conc.Sync.ThreadId <a id="6419" class="Symbol">#-}</a>
+
+<a id="6424" class="Keyword">postulate</a> <a id="forkIO"></a><a id="6434" href="StateSizedIO.GUI.WxBindingsFFI.html#6434" class="Postulate">forkIO</a> <a id="6441" class="Symbol">:</a> <a id="6443" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="6452" href="Unit.html#28" class="Record">Unit</a> <a id="6457" class="Symbol">→</a> <a id="6459" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="6468" href="StateSizedIO.GUI.WxBindingsFFI.html#6349" class="Postulate">ThreadId</a>
+<a id="6477" class="Symbol">{-#</a> <a id="6481" class="Keyword">COMPILE</a> GHC <a id="6493" href="StateSizedIO.GUI.WxBindingsFFI.html#6434" class="Postulate">forkIO</a> = GHC.Conc.Sync.forkIO <a id="6523" class="Symbol">#-}</a>
+
+<a id="6528" class="Keyword">postulate</a> <a id="Bitmap"></a><a id="6538" href="StateSizedIO.GUI.WxBindingsFFI.html#6538" class="Postulate">Bitmap</a> <a id="6545" class="Symbol">:</a> <a id="6547" class="PrimitiveType">Set</a>
+<a id="6551" class="Symbol">{-#</a> <a id="6555" class="Keyword">COMPILE</a> GHC <a id="6567" href="StateSizedIO.GUI.WxBindingsFFI.html#6538" class="Postulate">Bitmap</a> = type (Graphics.UI.WXCore.Bitmap ())  <a id="6613" class="Symbol">#-}</a>
+
+<a id="6618" class="Keyword">postulate</a> <a id="bitmap"></a><a id="6628" href="StateSizedIO.GUI.WxBindingsFFI.html#6628" class="Postulate">bitmap</a> <a id="6635" class="Symbol">:</a> <a id="6637" href="Agda.Builtin.String.html#165" class="Postulate">String</a> <a id="6644" class="Symbol">→</a> <a id="6646" href="StateSizedIO.GUI.WxBindingsFFI.html#6538" class="Postulate">Bitmap</a>
+<a id="6653" class="Symbol">{-#</a> <a id="6657" class="Keyword">COMPILE</a> GHC <a id="6669" href="StateSizedIO.GUI.WxBindingsFFI.html#6628" class="Postulate">bitmap</a> = (\s -&gt; Graphics.UI.WX.bitmap (Data.Text.unpack s)) <a id="6729" class="Symbol">#-}</a>
+
+<a id="6734" class="Keyword">postulate</a> <a id="DC"></a><a id="6744" href="StateSizedIO.GUI.WxBindingsFFI.html#6744" class="Postulate">DC</a> <a id="6747" class="Symbol">:</a> <a id="6749" class="PrimitiveType">Set</a>
+<a id="6753" class="Symbol">{-#</a> <a id="6757" class="Keyword">COMPILE</a> GHC <a id="6769" href="StateSizedIO.GUI.WxBindingsFFI.html#6744" class="Postulate">DC</a> = type (Graphics.UI.WXCore.DC ()) <a id="6806" class="Symbol">#-}</a>
+
+<a id="6811" class="Keyword">postulate</a> <a id="Rect"></a><a id="6821" href="StateSizedIO.GUI.WxBindingsFFI.html#6821" class="Postulate">Rect</a> <a id="6826" class="Symbol">:</a> <a id="6828" class="PrimitiveType">Set</a>
+<a id="6832" class="Symbol">{-#</a> <a id="6836" class="Keyword">COMPILE</a> GHC <a id="6848" href="StateSizedIO.GUI.WxBindingsFFI.html#6821" class="Postulate">Rect</a> = type Graphics.UI.WXCore.Rect <a id="6884" class="Symbol">#-}</a>
+
+<a id="6889" class="Keyword">postulate</a> <a id="nativeSetClickRight"></a><a id="6899" href="StateSizedIO.GUI.WxBindingsFFI.html#6899" class="Postulate">nativeSetClickRight</a> <a id="6919" class="Symbol">:</a> <a id="6921" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a>  <a id="6928" class="Symbol">→</a> <a id="6930" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="6939" href="Unit.html#28" class="Record">Unit</a> <a id="6944" class="Symbol">→</a> <a id="6946" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="6955" href="Unit.html#28" class="Record">Unit</a>
+<a id="6960" class="Symbol">{-#</a> <a id="6964" class="Keyword">COMPILE</a> GHC <a id="6976" href="StateSizedIO.GUI.WxBindingsFFI.html#6899" class="Postulate">nativeSetClickRight</a> = (\ fra prog -&gt; Graphics.UI.WX.set fra [Graphics.UI.WX.on Graphics.UI.WX.clickRight Graphics.UI.WX.:= (\x -&gt; prog)]) <a id="7114" class="Symbol">#-}</a>
+
+
+<a id="7120" class="Keyword">postulate</a> <a id="nativeSetOnPaint"></a><a id="7130" href="StateSizedIO.GUI.WxBindingsFFI.html#7130" class="Postulate">nativeSetOnPaint</a> <a id="7147" class="Symbol">:</a> <a id="7149" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> <a id="7155" class="Symbol">→</a> <a id="7157" class="Symbol">(</a><a id="7158" href="StateSizedIO.GUI.WxBindingsFFI.html#6744" class="Postulate">DC</a> <a id="7161" class="Symbol">→</a> <a id="7163" href="StateSizedIO.GUI.WxBindingsFFI.html#6821" class="Postulate">Rect</a> <a id="7168" class="Symbol">→</a> <a id="7170" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="7179" href="Unit.html#28" class="Record">Unit</a><a id="7183" class="Symbol">)</a> <a id="7185" class="Symbol">→</a> <a id="7187" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="7196" href="Unit.html#28" class="Record">Unit</a>
+<a id="7201" class="Symbol">{-#</a> <a id="7205" class="Keyword">COMPILE</a> GHC <a id="7217" href="StateSizedIO.GUI.WxBindingsFFI.html#7130" class="Postulate">nativeSetOnPaint</a> = (\ fra prog -&gt; Graphics.UI.WX.set fra [Graphics.UI.WX.on Graphics.UI.WX.paint Graphics.UI.WX.:= prog]) <a id="7339" class="Symbol">#-}</a>
+
+<a id="7344" class="Keyword">postulate</a> <a id="nativeRepaint"></a><a id="7354" href="StateSizedIO.GUI.WxBindingsFFI.html#7354" class="Postulate">nativeRepaint</a> <a id="7368" class="Symbol">:</a> <a id="7370" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> <a id="7376" class="Symbol">→</a> <a id="7378" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="7387" href="Unit.html#28" class="Record">Unit</a>
+<a id="7392" class="Symbol">{-#</a> <a id="7396" class="Keyword">COMPILE</a> GHC <a id="7408" href="StateSizedIO.GUI.WxBindingsFFI.html#7354" class="Postulate">nativeRepaint</a> = Graphics.UI.WX.repaint <a id="7447" class="Symbol">#-}</a>
+
+<a id="Point"></a><a id="7452" href="StateSizedIO.GUI.WxBindingsFFI.html#7452" class="Function">Point</a> <a id="7458" class="Symbol">:</a> <a id="7460" class="PrimitiveType">Set</a>
+<a id="7464" href="StateSizedIO.GUI.WxBindingsFFI.html#7452" class="Function">Point</a> <a id="7470" class="Symbol">=</a> <a id="7472" class="Symbol">(</a><a id="7473" href="Agda.Builtin.Int.html#178" class="Datatype">ℤ</a> <a id="7475" href="Data.Product.html#1329" class="Function Operator">×</a> <a id="7477" href="Agda.Builtin.Int.html#178" class="Datatype">ℤ</a><a id="7478" class="Symbol">)</a>
+
+<a id="7481" class="Keyword">postulate</a> <a id="NativePoint"></a><a id="7491" href="StateSizedIO.GUI.WxBindingsFFI.html#7491" class="Postulate">NativePoint</a> <a id="7503" class="Symbol">:</a> <a id="7505" class="PrimitiveType">Set</a>
+<a id="7509" class="Symbol">{-#</a> <a id="7513" class="Keyword">COMPILE</a> GHC <a id="7525" href="StateSizedIO.GUI.WxBindingsFFI.html#7491" class="Postulate">NativePoint</a> = type Graphics.UI.WXCore.Point <a id="7569" class="Symbol">#-}</a>
+
+<a id="7574" class="Keyword">postulate</a> <a id="nativePoint"></a><a id="7584" href="StateSizedIO.GUI.WxBindingsFFI.html#7584" class="Postulate">nativePoint</a> <a id="7596" class="Symbol">:</a> <a id="7598" href="Agda.Builtin.Int.html#178" class="Datatype">ℤ</a> <a id="7600" class="Symbol">→</a> <a id="7602" href="Agda.Builtin.Int.html#178" class="Datatype">ℤ</a> <a id="7604" class="Symbol">→</a> <a id="7606" href="StateSizedIO.GUI.WxBindingsFFI.html#7491" class="Postulate">NativePoint</a>
+<a id="7618" class="Symbol">{-#</a> <a id="7622" class="Keyword">COMPILE</a> GHC <a id="7634" href="StateSizedIO.GUI.WxBindingsFFI.html#7584" class="Postulate">nativePoint</a> = (\ x y -&gt; Graphics.UI.WXCore.point (fromInteger x) (fromInteger y)) <a id="7716" class="Symbol">#-}</a>
+
+
+<a id="7722" class="Keyword">postulate</a> <a id="nativeDrawBitmapNativePoint"></a><a id="7732" href="StateSizedIO.GUI.WxBindingsFFI.html#7732" class="Postulate">nativeDrawBitmapNativePoint</a> <a id="7760" class="Symbol">:</a> <a id="7762" href="StateSizedIO.GUI.WxBindingsFFI.html#6744" class="Postulate">DC</a> <a id="7765" class="Symbol">→</a> <a id="7767" href="StateSizedIO.GUI.WxBindingsFFI.html#6538" class="Postulate">Bitmap</a> <a id="7774" class="Symbol">→</a> <a id="7776" href="StateSizedIO.GUI.WxBindingsFFI.html#7491" class="Postulate">NativePoint</a> <a id="7788" class="Symbol">→</a> <a id="7790" href="Agda.Builtin.Bool.html#67" class="Datatype">Bool</a> <a id="7795" class="Symbol">→</a> <a id="7797" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="7806" href="Unit.html#28" class="Record">Unit</a>
+<a id="7811" class="Symbol">{-#</a> <a id="7815" class="Keyword">COMPILE</a> GHC <a id="7827" href="StateSizedIO.GUI.WxBindingsFFI.html#7732" class="Postulate">nativeDrawBitmapNativePoint</a> = (\ d bi p bo -&gt; Graphics.UI.WX.drawBitmap d bi p bo [] ) <a id="7914" class="Symbol">#-}</a>
+
+
+<a id="nativeDrawBitmap"></a><a id="7920" href="StateSizedIO.GUI.WxBindingsFFI.html#7920" class="Function">nativeDrawBitmap</a> <a id="7937" class="Symbol">:</a> <a id="7939" href="StateSizedIO.GUI.WxBindingsFFI.html#6744" class="Postulate">DC</a> <a id="7942" class="Symbol">→</a> <a id="7944" href="StateSizedIO.GUI.WxBindingsFFI.html#6538" class="Postulate">Bitmap</a> <a id="7951" class="Symbol">→</a> <a id="7953" href="StateSizedIO.GUI.WxBindingsFFI.html#7452" class="Function">Point</a> <a id="7959" class="Symbol">→</a> <a id="7961" href="Agda.Builtin.Bool.html#67" class="Datatype">Bool</a> <a id="7966" class="Symbol">→</a> <a id="7968" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="7977" href="Unit.html#28" class="Record">Unit</a>
+<a id="7982" href="StateSizedIO.GUI.WxBindingsFFI.html#7920" class="Function">nativeDrawBitmap</a> <a id="7999" href="StateSizedIO.GUI.WxBindingsFFI.html#7999" class="Bound">d</a> <a id="8001" href="StateSizedIO.GUI.WxBindingsFFI.html#8001" class="Bound">bi</a> <a id="8004" class="Symbol">(</a><a id="8005" href="StateSizedIO.GUI.WxBindingsFFI.html#8005" class="Bound">x</a> <a id="8007" href="Data.Product.html#543" class="InductiveConstructor Operator">,</a> <a id="8009" href="StateSizedIO.GUI.WxBindingsFFI.html#8009" class="Bound">y</a><a id="8010" class="Symbol">)</a> <a id="8012" href="StateSizedIO.GUI.WxBindingsFFI.html#8012" class="Bound">bo</a> <a id="8015" class="Symbol">=</a> <a id="8017" href="StateSizedIO.GUI.WxBindingsFFI.html#7732" class="Postulate">nativeDrawBitmapNativePoint</a> <a id="8045" href="StateSizedIO.GUI.WxBindingsFFI.html#7999" class="Bound">d</a> <a id="8047" href="StateSizedIO.GUI.WxBindingsFFI.html#8001" class="Bound">bi</a> <a id="8050" class="Symbol">(</a><a id="8051" href="StateSizedIO.GUI.WxBindingsFFI.html#7584" class="Postulate">nativePoint</a> <a id="8063" href="StateSizedIO.GUI.WxBindingsFFI.html#8005" class="Bound">x</a> <a id="8065" href="StateSizedIO.GUI.WxBindingsFFI.html#8009" class="Bound">y</a><a id="8066" class="Symbol">)</a> <a id="8068" href="StateSizedIO.GUI.WxBindingsFFI.html#8012" class="Bound">bo</a>
+
+<a id="8072" class="Symbol">{-#</a> <a id="8076" class="Keyword">FOREIGN</a> GHC import Graphics.UI.WXCore.WxcClassesAL <a id="8127" class="Symbol">#-}</a>
+
+<a id="8132" class="Keyword">postulate</a> <a id="nativeBitmapGetWidth"></a><a id="8142" href="StateSizedIO.GUI.WxBindingsFFI.html#8142" class="Postulate">nativeBitmapGetWidth</a> <a id="8163" class="Symbol">:</a> <a id="8165" href="StateSizedIO.GUI.WxBindingsFFI.html#6538" class="Postulate">Bitmap</a> <a id="8172" class="Symbol">→</a> <a id="8174" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="8183" href="Agda.Builtin.Int.html#178" class="Datatype">ℤ</a>
+<a id="8185" class="Symbol">{-#</a> <a id="8189" class="Keyword">COMPILE</a> GHC <a id="8201" href="StateSizedIO.GUI.WxBindingsFFI.html#8142" class="Postulate">nativeBitmapGetWidth</a> = (\ b -&gt; fmap fromIntegral (Graphics.UI.WXCore.WxcClassesAL.bitmapGetWidth b)) <a id="8302" class="Symbol">#-}</a>
+
+<a id="8307" class="Keyword">postulate</a> <a id="start"></a><a id="8317" href="StateSizedIO.GUI.WxBindingsFFI.html#8317" class="Postulate">start</a> <a id="8323" class="Symbol">:</a> <a id="8325" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="8334" href="Unit.html#28" class="Record">Unit</a> <a id="8339" class="Symbol">→</a> <a id="8341" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="8350" href="Unit.html#28" class="Record">Unit</a>
+<a id="8355" class="Symbol">{-#</a> <a id="8359" class="Keyword">COMPILE</a> GHC <a id="8371" href="StateSizedIO.GUI.WxBindingsFFI.html#8317" class="Postulate">start</a> = Graphics.UI.WX.start <a id="8400" class="Symbol">#-}</a>
+
+<a id="8405" class="Comment">--</a>
+<a id="8408" class="Comment">--  Note: we add the &quot;key pressed&quot; event to a button</a>
+<a id="8461" class="Comment">--  and not to a frame, because of a bug in wxHaskell that prevents</a>
+<a id="8529" class="Comment">--  adding a key pressed event to a frame (at least on linux plattforms).</a>
+<a id="8603" class="Comment">--</a>
+
+
+<a id="8608" class="Keyword">postulate</a>
+  <a id="Key"></a><a id="8620" href="StateSizedIO.GUI.WxBindingsFFI.html#8620" class="Postulate">Key</a> <a id="8624" class="Symbol">:</a> <a id="8626" class="PrimitiveType">Set</a>
+  <a id="showKey"></a><a id="8632" href="StateSizedIO.GUI.WxBindingsFFI.html#8632" class="Postulate">showKey</a> <a id="8640" class="Symbol">:</a> <a id="8642" href="StateSizedIO.GUI.WxBindingsFFI.html#8620" class="Postulate">Key</a> <a id="8646" class="Symbol">-&gt;</a> <a id="8649" href="Agda.Builtin.String.html#165" class="Postulate">String</a>
+  <a id="nativeSetKeyHandler"></a><a id="8658" href="StateSizedIO.GUI.WxBindingsFFI.html#8658" class="Postulate">nativeSetKeyHandler</a> <a id="8678" class="Symbol">:</a> <a id="8680" href="StateSizedIO.GUI.WxBindingsFFI.html#734" class="Postulate">Button</a> <a id="8687" class="Symbol">→</a> <a id="8689" class="Symbol">(</a><a id="8690" href="StateSizedIO.GUI.WxBindingsFFI.html#8620" class="Postulate">Key</a> <a id="8694" class="Symbol">→</a> <a id="8696" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="8705" href="Unit.html#28" class="Record">Unit</a><a id="8709" class="Symbol">)</a> <a id="8711" class="Symbol">→</a> <a id="8713" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="8722" href="Unit.html#28" class="Record">Unit</a>
+
+<a id="8728" class="Symbol">{-#</a> <a id="8732" class="Keyword">COMPILE</a> GHC <a id="8744" href="StateSizedIO.GUI.WxBindingsFFI.html#8620" class="Postulate">Key</a> = type Graphics.UI.WXCore.Events.Key <a id="8785" class="Symbol">#-}</a>
+<a id="8789" class="Symbol">{-#</a> <a id="8793" class="Keyword">COMPILE</a> GHC <a id="8805" href="StateSizedIO.GUI.WxBindingsFFI.html#8632" class="Postulate">showKey</a> = (\ k -&gt; (Data.Text.pack (Graphics.UI.WXCore.Events.showKey k))) <a id="8879" class="Symbol">#-}</a>
+
+<a id="8884" class="Symbol">{-#</a> <a id="8888" class="Keyword">COMPILE</a> GHC <a id="8900" href="StateSizedIO.GUI.WxBindingsFFI.html#8658" class="Postulate">nativeSetKeyHandler</a> = (\bt prog -&gt; Graphics.UI.WX.set bt [Graphics.UI.WX.on Graphics.UI.WX.anyKey Graphics.UI.WX.:= prog]) <a id="9023" class="Symbol">#-}</a>
+
+
+
+<a id="9030" class="Comment">--</a>
+<a id="9033" class="Comment">-- Delete Objects</a>
+<a id="9051" class="Comment">--</a>
+
+<a id="9055" class="Comment">-- note: can be solved with instance arguments in the future</a>
+<a id="9116" class="Keyword">postulate</a> <a id="objectDeleteFrame"></a><a id="9126" href="StateSizedIO.GUI.WxBindingsFFI.html#9126" class="Postulate">objectDeleteFrame</a> <a id="9144" class="Symbol">:</a> <a id="9146" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> <a id="9152" class="Symbol">→</a> <a id="9154" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="9163" href="Unit.html#28" class="Record">Unit</a>
+<a id="9168" class="Symbol">{-#</a> <a id="9172" class="Keyword">COMPILE</a> GHC <a id="9184" href="StateSizedIO.GUI.WxBindingsFFI.html#9126" class="Postulate">objectDeleteFrame</a> = (\f -&gt; Graphics.UI.WX.objectDelete f) <a id="9242" class="Symbol">#-}</a>
+
+<a id="9247" class="Keyword">postulate</a> <a id="nativeDeleteButton"></a><a id="9257" href="StateSizedIO.GUI.WxBindingsFFI.html#9257" class="Postulate">nativeDeleteButton</a> <a id="9276" class="Symbol">:</a> <a id="9278" href="StateSizedIO.GUI.WxBindingsFFI.html#734" class="Postulate">Button</a> <a id="9285" class="Symbol">→</a> <a id="9287" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="9296" href="Unit.html#28" class="Record">Unit</a>
+<a id="9301" class="Symbol">{-#</a> <a id="9305" class="Keyword">COMPILE</a> GHC <a id="9317" href="StateSizedIO.GUI.WxBindingsFFI.html#9257" class="Postulate">nativeDeleteButton</a> = (\f -&gt; Graphics.UI.WX.objectDelete f) <a id="9376" class="Symbol">#-}</a>
+
+<a id="9381" class="Keyword">postulate</a> <a id="nativeDeleteTextCtrl"></a><a id="9391" href="StateSizedIO.GUI.WxBindingsFFI.html#9391" class="Postulate">nativeDeleteTextCtrl</a> <a id="9412" class="Symbol">:</a> <a id="9414" href="StateSizedIO.GUI.WxBindingsFFI.html#819" class="Postulate">TextCtrl</a> <a id="9423" class="Symbol">→</a> <a id="9425" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="9434" href="Unit.html#28" class="Record">Unit</a>
+<a id="9439" class="Symbol">{-#</a> <a id="9443" class="Keyword">COMPILE</a> GHC <a id="9455" href="StateSizedIO.GUI.WxBindingsFFI.html#9391" class="Postulate">nativeDeleteTextCtrl</a> = (\f -&gt; Graphics.UI.WX.objectDelete f) <a id="9516" class="Symbol">#-}</a>
+</pre></body></html>
