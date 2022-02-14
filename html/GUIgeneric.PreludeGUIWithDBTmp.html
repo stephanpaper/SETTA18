@@ -1,24 +1,25 @@
 <!DOCTYPE HTML>
-<html><head><meta charset="utf-8"><title>GUIgeneric.PreludeGUIWithDBTmp</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Keyword">module</a> <a id="8" href="GUIgeneric.PreludeGUIWithDBTmp.html" class="Module">GUIgeneric.PreludeGUIWithDBTmp</a> <a id="39" class="Keyword">where</a>
+<html><head><meta charset="utf-8"><title>GUIgeneric.PreludeGUIWithDBTmp</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--sized-types</a> <a id="27" class="Pragma">--guardedness</a>  <a id="42" class="Symbol">#-}</a>
+<a id="46" class="Keyword">module</a> <a id="53" href="GUIgeneric.PreludeGUIWithDBTmp.html" class="Module">GUIgeneric.PreludeGUIWithDBTmp</a> <a id="84" class="Keyword">where</a>
 
 
-<a id="47" class="Comment">--</a>
-<a id="50" class="Comment">-- ooAgda Imports</a>
-<a id="68" class="Comment">--</a>
-<a id="71" class="Keyword">open</a> <a id="76" class="Keyword">import</a> <a id="83" href="NativeIO.html" class="Module">NativeIO</a> <a id="92" class="Keyword">public</a>
-<a id="99" class="Comment">-- open import StateSizedIO.BaseNonPoly hiding (IOInterfaceˢ; IOˢ; IOˢ&#39;; IOˢ+; delayˢ; execˢ; fmapˢ; fmapˢ&#39;; returnˢ; IOObjectˢ;IOObjectˢ-bjectˢ-) public</a>
-<a id="253" class="Keyword">open</a> <a id="258" class="Keyword">import</a> <a id="265" href="SizedIO.Base.html" class="Module">SizedIO.Base</a> <a id="278" class="Keyword">public</a>
+<a id="92" class="Comment">--</a>
+<a id="95" class="Comment">-- ooAgda Imports</a>
+<a id="113" class="Comment">--</a>
+<a id="116" class="Keyword">open</a> <a id="121" class="Keyword">import</a> <a id="128" href="NativeIO.html" class="Module">NativeIO</a> <a id="137" class="Keyword">public</a>
+<a id="144" class="Comment">-- open import StateSizedIO.BaseNonPoly hiding (IOInterfaceˢ; IOˢ; IOˢ&#39;; IOˢ+; delayˢ; execˢ; fmapˢ; fmapˢ&#39;; returnˢ; IOObjectˢ;IOObjectˢ-bjectˢ-) public</a>
+<a id="298" class="Keyword">open</a> <a id="303" class="Keyword">import</a> <a id="310" href="SizedIO.Base.html" class="Module">SizedIO.Base</a> <a id="323" class="Keyword">public</a>
 
-<a id="286" class="Comment">-- Graphic lib</a>
-<a id="301" class="Comment">--</a>
-<a id="304" class="Keyword">open</a> <a id="309" class="Keyword">import</a> <a id="316" href="StateSizedIO.GUI.WxGraphicsLibLevel3WithDBPrime.html" class="Module">StateSizedIO.GUI.WxGraphicsLibLevel3WithDBPrime</a> <a id="364" class="Keyword">public</a> <a id="371" class="Keyword">renaming</a> <a id="380" class="Symbol">(</a><a id="381" href="StateSizedIO.GUI.WxGraphicsLibLevel3WithDBPrime.html#1669" class="InductiveConstructor">createFrame</a> <a id="393" class="Symbol">to</a> <a id="396" href="StateSizedIO.GUI.WxGraphicsLibLevel3WithDBPrime.html#1669" class="InductiveConstructor">createWxFrame</a><a id="409" class="Symbol">)</a> <a id="411" class="Keyword">hiding</a> <a id="418" class="Symbol">(</a><a id="419" href="StateSizedIO.GUI.WxGraphicsLibLevel3WithDBPrime.html#11257" class="Function">main</a><a id="423" class="Symbol">)</a>
+<a id="331" class="Comment">-- Graphic lib</a>
+<a id="346" class="Comment">--</a>
+<a id="349" class="Keyword">open</a> <a id="354" class="Keyword">import</a> <a id="361" href="StateSizedIO.GUI.WxGraphicsLibLevel3WithDBPrime.html" class="Module">StateSizedIO.GUI.WxGraphicsLibLevel3WithDBPrime</a> <a id="409" class="Keyword">public</a> <a id="416" class="Keyword">renaming</a> <a id="425" class="Symbol">(</a><a id="426" href="StateSizedIO.GUI.WxGraphicsLibLevel3WithDBPrime.html#1669" class="InductiveConstructor">createFrame</a> <a id="438" class="Symbol">to</a> <a id="441" class="InductiveConstructor">createWxFrame</a><a id="454" class="Symbol">)</a> <a id="456" class="Keyword">hiding</a> <a id="463" class="Symbol">(</a><a id="464" href="StateSizedIO.GUI.WxGraphicsLibLevel3WithDBPrime.html#11257" class="Function">main</a><a id="468" class="Symbol">)</a>
 
-<a id="426" class="Comment">-- WxHaskell</a>
-<a id="439" class="Comment">--</a>
-<a id="442" class="Keyword">open</a> <a id="447" class="Keyword">import</a> <a id="454" href="StateSizedIO.GUI.WxBindingsFFI.html" class="Module">StateSizedIO.GUI.WxBindingsFFI</a>  <a id="486" class="Keyword">renaming</a> <a id="495" class="Symbol">(</a><a id="496" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> <a id="502" class="Symbol">to</a> <a id="505" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">FFIFrame</a><a id="513" class="Symbol">;</a> <a id="515" href="StateSizedIO.GUI.WxBindingsFFI.html#734" class="Postulate">Button</a> <a id="522" class="Symbol">to</a> <a id="525" href="StateSizedIO.GUI.WxBindingsFFI.html#734" class="Postulate">FFIButton</a><a id="534" class="Symbol">;</a> <a id="536" href="StateSizedIO.GUI.WxBindingsFFI.html#819" class="Postulate">TextCtrl</a> <a id="545" class="Symbol">to</a> <a id="548" href="StateSizedIO.GUI.WxBindingsFFI.html#819" class="Postulate">FFITextCtrl</a><a id="559" class="Symbol">)</a> <a id="561" class="Keyword">public</a>
+<a id="471" class="Comment">-- WxHaskell</a>
+<a id="484" class="Comment">--</a>
+<a id="487" class="Keyword">open</a> <a id="492" class="Keyword">import</a> <a id="499" href="StateSizedIO.GUI.WxBindingsFFI.html" class="Module">StateSizedIO.GUI.WxBindingsFFI</a>  <a id="531" class="Keyword">renaming</a> <a id="540" class="Symbol">(</a><a id="541" href="StateSizedIO.GUI.WxBindingsFFI.html#650" class="Postulate">Frame</a> <a id="547" class="Symbol">to</a> <a id="550" class="Postulate">FFIFrame</a><a id="558" class="Symbol">;</a> <a id="560" href="StateSizedIO.GUI.WxBindingsFFI.html#734" class="Postulate">Button</a> <a id="567" class="Symbol">to</a> <a id="570" class="Postulate">FFIButton</a><a id="579" class="Symbol">;</a> <a id="581" href="StateSizedIO.GUI.WxBindingsFFI.html#819" class="Postulate">TextCtrl</a> <a id="590" class="Symbol">to</a> <a id="593" class="Postulate">FFITextCtrl</a><a id="604" class="Symbol">)</a> <a id="606" class="Keyword">public</a>
 
-<a id="569" class="Comment">--</a>
-<a id="572" class="Comment">--</a>
-<a id="575" class="Keyword">open</a> <a id="580" class="Keyword">import</a> <a id="587" href="StateSizedIO.GUI.BaseStateDependent.html" class="Module">StateSizedIO.GUI.BaseStateDependent</a> <a id="623" class="Keyword">public</a>
-<a id="630" class="Keyword">open</a> <a id="635" class="Keyword">import</a> <a id="642" href="StateSizedIO.GUI.VariableList.html" class="Module">StateSizedIO.GUI.VariableList</a> <a id="672" class="Keyword">renaming</a> <a id="681" class="Symbol">(</a><a id="682" href="StateSizedIO.GUI.VariableList.html#261" class="InductiveConstructor">addVar</a> <a id="689" class="Symbol">to</a> <a id="692" href="StateSizedIO.GUI.VariableList.html#261" class="InductiveConstructor">addVar&#39;</a><a id="699" class="Symbol">;</a> <a id="701" href="StateSizedIO.GUI.VariableList.html#309" class="Function">addVar&#39;</a> <a id="709" class="Symbol">to</a> <a id="712" href="StateSizedIO.GUI.VariableList.html#309" class="Function">addVar</a><a id="718" class="Symbol">)</a> <a id="720" class="Keyword">public</a>
+<a id="614" class="Comment">--</a>
+<a id="617" class="Comment">--</a>
+<a id="620" class="Keyword">open</a> <a id="625" class="Keyword">import</a> <a id="632" href="StateSizedIO.GUI.BaseStateDependent.html" class="Module">StateSizedIO.GUI.BaseStateDependent</a> <a id="668" class="Keyword">public</a>
+<a id="675" class="Keyword">open</a> <a id="680" class="Keyword">import</a> <a id="687" href="StateSizedIO.GUI.VariableList.html" class="Module">StateSizedIO.GUI.VariableList</a> <a id="717" class="Keyword">renaming</a> <a id="726" class="Symbol">(</a><a id="727" href="StateSizedIO.GUI.VariableList.html#261" class="InductiveConstructor">addVar</a> <a id="734" class="Symbol">to</a> <a id="737" class="InductiveConstructor">addVar&#39;</a><a id="744" class="Symbol">;</a> <a id="746" href="StateSizedIO.GUI.VariableList.html#309" class="Function">addVar&#39;</a> <a id="754" class="Symbol">to</a> <a id="757" class="Function">addVar</a><a id="763" class="Symbol">)</a> <a id="765" class="Keyword">public</a>
 </pre></body></html>
