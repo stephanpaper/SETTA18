@@ -1,7 +1,9 @@
-open import Data.Bool
+{-# OPTIONS --sized-types --guardedness  #-}
+
 
 module GUIgeneric.GUIExampleInfiniteBtnsAdvanced   where
 
+open import Data.Bool
 open import GUIgeneric.Prelude renaming (inj₁ to secondBtn; inj₂ to firstBtn) hiding (show)
 
 open import GUIgeneric.PreludeGUI renaming (WxColor to Color) hiding (_>>_) -- hding (addButton)

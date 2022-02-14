@@ -1,3 +1,4 @@
+{-# OPTIONS --sized-types --guardedness #-}
 module GUIgeneric.loadAllSETTA18 where
 
 

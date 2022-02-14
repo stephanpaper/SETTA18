@@ -1,11 +1,12 @@
-
+{-# OPTIONS --sized-types --guardedness #-}
 module GUIgeneric.GUIDefinitions where
 
 open import GUIgeneric.Prelude
 
 --open import GUIgeneric.PreludeGUI
 open import StateSizedIO.GUI.WxBindingsFFI using (WxColor)
-
+open import Relation.Binary.Definitions
+-- open import Relation.Nary
 
 
 open import Relation.Nullary
@@ -151,16 +152,16 @@ module _ where
 
   mutual
    _≟CompFr_ : Decidable {A = CompEls frame} _≡_
-   createC tt ≟CompFr createC tt = Dec.yes refl
-   createC tt ≟CompFr add  _ _ _ _ = Dec.no (λ ())
-   add _ _ _ _ ≟CompFr createC _ = Dec.no (λ ())
-   add _ _ _ optimized ≟CompFr add _ _ _ notOptimzed = Dec.no (λ ())
-   add _ _ _ notOptimzed ≟CompFr add _ _ _ optimized =  Dec.no (λ ())
+   createC tt ≟CompFr createC tt = yes refl
+   createC tt ≟CompFr add  _ _ _ _ = no (λ ())
+   add _ _ _ _ ≟CompFr createC _ = no (λ ())
+   add _ _ _ optimized ≟CompFr add _ _ _ notOptimzed = no (λ ())
+   add _ _ _ notOptimzed ≟CompFr add _ _ _ optimized =  no (λ ())
 
    add buttonFrame a c optimized ≟CompFr add buttonFrame b d optimized with (a ≟Comp b) | (c ≟Comp d)
-   ... | Dec.yes p | Dec.yes q = yes (cong₂ (λ x y → add buttonFrame x y optimized ) p q)
-   ... | Dec.yes p | Dec.no ¬p = no (λ addp → ¬p (lemmaAddEqProj2 addp))
-   ... | Dec.no ¬p | _ = no ((λ addp → ¬p (lemmaAddEqProj1 addp)))
+   ... | yes p | yes q = yes (cong₂ (λ x y → add buttonFrame x y optimized ) p q)
+   ... | yes p | no ¬p = no (λ addp → ¬p (lemmaAddEqProj2 addp))
+   ... | no ¬p | _ = no ((λ addp → ¬p (lemmaAddEqProj1 addp)))
 
 
 
@@ -171,24 +172,24 @@ module _ where
 
    _≟Comp_ : {c : Comp} → Decidable {A = CompEls c} _≡_
 
-   _≟Comp_ (createC _) (add _ _ _ isOpt) = Dec.no (λ ())
-   _≟Comp_ (add _ _ _ isOpt) (createC _) = Dec.no (λ ())
+   _≟Comp_ (createC _) (add _ _ _ isOpt) = no (λ ())
+   _≟Comp_ (add _ _ _ isOpt) (createC _) = no (λ ())
 
    _≟Comp_ {atomicComp} (add () a b isOpt) (add cd c d isOpt')
 
-   _≟Comp_ {frame} (createC tt) (createC tt) = Dec.yes refl
+   _≟Comp_ {frame} (createC tt) (createC tt) = yes refl
 
    _≟Comp_ {atomicComp} (createC (button s1)) (createC (button s2)) with (s1 ≟Str s2)
-   ... | Dec.yes p = Dec.yes (cong (createC ∘ button) p)
-   ... | Dec.no q = Dec.no  (λ neq →   q  (lemmaCreateCBtnEq neq)  )
+   ... | yes p = yes (cong (createC ∘ button) p)
+   ... | no q = no  (λ neq →   q  (lemmaCreateCBtnEq neq)  )
 
    _≟Comp_ {atomicComp} (createC (txtbox s1)) (createC (txtbox s2)) with (s1 ≟Str s2)
-   ... | Dec.yes p = Dec.yes (cong (createC ∘ txtbox) p)
-   ... | Dec.no q = Dec.no (λ neq →   q  (lemmaCreateCTxtbxEq neq)  )
+   ... | yes p = yes (cong (createC ∘ txtbox) p)
+   ... | no q = no (λ neq →   q  (lemmaCreateCTxtbxEq neq)  )
 
 
-   _≟Comp_ {atomicComp} (createC (button s1)) (createC (txtbox s2)) = Dec.no (λ ())
-   _≟Comp_ {atomicComp} (createC (txtbox s1)) (createC (button s2)) = Dec.no (λ ())
+   _≟Comp_ {atomicComp} (createC (button s1)) (createC (txtbox s2)) = no (λ ())
+   _≟Comp_ {atomicComp} (createC (txtbox s1)) (createC (button s2)) = no (λ ())
 
 
    _≟Comp_ {frame} (add c'c x x₁ isOpt) (add c'c₁ y y₁ isOpt₁) =

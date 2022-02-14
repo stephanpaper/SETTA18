@@ -1,8 +1,10 @@
+{-# OPTIONS --sized-types --guardedness  #-}
+
+module GUIgeneric.GUIModelAdvancedExampleGender  where
 
 open import Data.Bool
 open import Relation.Nullary
 open import Data.String renaming  (_==_ to _==strb_; _++_ to _++s_)
-module GUIgeneric.GUIModelAdvancedExampleGender  where
 
 open import GUIgeneric.Prelude renaming (inj₁ to secondButton; inj₂ to firstButton)
 open import GUIgeneric.PreludeGUI renaming (WxColor to Color) hiding (IOInterfaceˢ)

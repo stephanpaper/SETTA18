@@ -1,3 +1,4 @@
+{-# OPTIONS --sized-types --guardedness #-}
 open import Data.Bool
 
 module GUIgeneric.GUIExample   where

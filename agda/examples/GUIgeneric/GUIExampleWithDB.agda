@@ -1,7 +1,7 @@
-open import Data.Bool
-
+{-# OPTIONS --sized-types --guardedness  #-}
 module GUIgeneric.GUIExampleWithDB   where
 
+open import Data.Bool
 open import GUIgeneric.Prelude renaming (inj₁ to secondBtn; inj₂ to firstBtn)
 
 

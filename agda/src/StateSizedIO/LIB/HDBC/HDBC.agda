@@ -7,6 +7,7 @@ open import Data.String.Base renaming (_++_ to _++Str_)
 
 open import Data.Product renaming (map to mapProduct)
 open import Data.Integer
+open import Data.Integer.Show
 open import Data.List
 
 open import Function
@@ -85,7 +86,7 @@ postulate  toSqlValue : SqlVal → SqlValue
 
 toStringSqlVal : SqlVal → String
 toStringSqlVal (sqlString s)   = s
-toStringSqlVal (sqlInteger x)  = Data.Integer.show x
+toStringSqlVal (sqlInteger x)  = Data.Integer.Show.show x
 toStringSqlVal sqlNull         = "SqlValNull"
 toStringSqlVal sqlUndefined    = "SqlValUndefined"
 

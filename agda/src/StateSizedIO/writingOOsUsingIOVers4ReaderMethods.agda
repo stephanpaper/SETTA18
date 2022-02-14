@@ -13,7 +13,7 @@ open import Data.Nat
 open import Data.Fin
 open import Data.Bool
 open import Level renaming (zero to lzero; suc to lsuc)
-open import Function
+open import Function hiding (force)
 open import Data.Unit
 open import Data.String
 open import Unit
@@ -318,7 +318,7 @@ module _ (I₁ : IOInterfaceˢ{lzero} )
 
   mutual
 
-    record  IOˢindcoind (i : Size)(A : S₁ → S₂ → Set) (s₁ : S₁)(s₂ : S₂) : Set where 
+    record  IOˢindcoind (i : Size)(A : S₁ → S₂ → Set) (s₁ : S₁)(s₂ : S₂) : Set where
       coinductive
       field
             forceIC : {j : Size< i} → IOˢindcoind+ j A s₁ s₂

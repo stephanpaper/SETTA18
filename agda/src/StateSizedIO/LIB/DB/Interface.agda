@@ -15,7 +15,7 @@ open import StateSizedIO.LIB.HDBC.HDBC
 open import StateSizedIO.LIB.DB.Schema
 
 open import StateSizedIO.LIB.DB.Serialization
-
+open import Data.List.Categorical
 
 open import StateSizedIO.LIB.library
 
@@ -31,6 +31,6 @@ insertRows : Connection →
 insertRows conn schema table xs =
   nativePrepare conn (insertCommand schema table) >>= λ statement →
 
-  mapM ioMonad (λ x → nativeExecute statement (row2SqlVal x)) xs >>= λ x →
+  Data.List.Categorical.TraversableM.mapM ioMonad (λ x → nativeExecute statement (row2SqlVal x)) xs >>= λ x →
   nativeCommit conn >>= λ _ →
   return _

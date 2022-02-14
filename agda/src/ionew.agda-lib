@@ -1,3 +1,6 @@
 name: ionew
 depend: standard-library
 include: .
+flags:
+   --sized-types
+   --guardedness 

@@ -1,10 +1,10 @@
 
 module SizedIO.Base where
 
-open import Data.Maybe.Base
+open import Data.Maybe.Base hiding (_>>=_)
 open import Data.Sum renaming (inj₁ to left; inj₂ to right; [_,_]′ to either)
 
-open import Function
+open import Function hiding (force)
 --open import Level using (_⊔_) renaming (suc to lsuc)
 open import Size
 open import Data.List
@@ -13,8 +13,8 @@ open import SizedIO.Object
 open import NativeIO
 open import Data.Product
 
-record IOInterface  : Set₁ where 
-  field 
+record IOInterface  : Set₁ where
+  field
     Command   : Set
     Response  : (m : Command) → Set
 open IOInterface public

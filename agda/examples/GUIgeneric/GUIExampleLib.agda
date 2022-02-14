@@ -1,4 +1,4 @@
-
+{-# OPTIONS --sized-types --guardedness  #-}
 
 module GUIgeneric.GUIExampleLib where
 
@@ -95,8 +95,8 @@ addTxtBox' str fr isOpt = add' buttonFrame (create-txtbox str) fr isOpt
 
 
 
-record GUI {i : Size} : Set₁ where 
-   field   
+record GUI {i : Size} : Set₁ where
+   field
       defFrame  : Frame
       property  : properties defFrame
       obj       : HandlerObject i defFrame

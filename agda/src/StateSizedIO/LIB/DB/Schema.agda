@@ -5,7 +5,7 @@ open import Data.String renaming (_++_ to _+++_) hiding (length)
 open import Data.Nat
 open import Data.List
 open import Data.Product hiding (map)
-open import Data.Vec hiding (map)
+open import Data.Vec hiding (map;length)
 open import Data.Integer
 open import Data.Unit
 open import Data.Fin

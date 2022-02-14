@@ -1,3 +1,4 @@
+{-# OPTIONS --sized-types --guardedness  #-}
 module GUIgeneric.GUIModelAdvancedWithDB where
 
 open import GUIgeneric.Prelude renaming (inj₁ to secondButton; inj₂ to firstButton)

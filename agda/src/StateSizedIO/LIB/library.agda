@@ -1,18 +1,20 @@
 module StateSizedIO.LIB.library where
 
 open import Data.Bool.Base
-open import Data.String.Base hiding (length)
+open import Data.String.Base hiding (length;intersperse)
 open import Function
-open import Data.String renaming (_++_ to _++Str_) hiding (length)
+open import Data.String renaming (_++_ to _++Str_) hiding (length;intersperse)
 open import Data.List
-open import Data.Fin renaming (_+_ to _+,_;_<_ to _<F_)
+open import Data.Fin hiding (toℕ) renaming (_+_ to _+,_;_<_ to _<F_)
 
 open import Agda.Builtin.Char
 open import Data.Maybe hiding (map)
 
 open import Category.Monad
 open import Category.Monad.Indexed
-
+open import Agda.Builtin.String using (primStringEquality)
+open import Data.Char hiding (isDigit)
+open import Data.Nat
 
 
 open import NativeIO
@@ -28,13 +30,8 @@ concatStr = foldr _++Str_ ""
 concatIntersperse : (x : String) (y : List String) → String
 concatIntersperse intersperseStr list = concatStr (intersperse intersperseStr list)
 
-
-
-open import Data.Char
-open import Data.Nat
-
 charToDecDigitNat : Char -> ℕ
-charToDecDigitNat c = (toNat c) ∸ 48
+charToDecDigitNat c = (toℕ c) ∸ 48
 
 readNat : List Char -> ℕ                 -- convert from decimal digit chars
 readNat =  toN ∘ map charToDecDigitNat ∘ reverse

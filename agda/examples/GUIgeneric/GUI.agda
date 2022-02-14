@@ -1,11 +1,11 @@
-
+{-# OPTIONS --sized-types --guardedness  #-}
 
 module GUIgeneric.GUI  where
 
 open import GUIgeneric.Prelude
 open import GUIgeneric.PreludeGUI
 open import GUIgeneric.GUIDefinitions
-
+open import Relation.Nullary
 
 
 Frame : Set
@@ -365,10 +365,10 @@ module _ where
                          (obj : HandlerObject ∞ gNew)
                          (dec : Dec (g ≡ gNew))
                          → IO GuiInterface i StateAndGuiObj
-  buttonHandleraux bt g ffi rel m .g a obj (Dec.yes refl)
+  buttonHandleraux bt g ffi rel m .g a obj (yes refl)
                = method obj (methodLift+ bt g g  rel m) >>= λ { (r , obj') →
                  buttonHandleraux2 bt g ffi rel m a obj r obj'}
-  buttonHandleraux bt g ffi rel m gNew a obj (Dec.no ¬p)
+  buttonHandleraux bt g ffi rel m gNew a obj (no ¬p)
               = log "ERROR: button handler is called for wrong GUI !!" λ _ →
                 return (gNew , a , obj)
 

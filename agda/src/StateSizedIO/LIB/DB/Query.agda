@@ -8,6 +8,7 @@ open import Data.List hiding (lookup)
 open import Data.Vec hiding (lookup; _++_)
 open import Function
 open import Data.Integer renaming (show to showℤ)
+open import Data.Integer.Show
 
 import StateSizedIO.LIB.DB.Dictionary
 
@@ -79,7 +80,7 @@ sepBy i (x ∷ xs) = x +++ i +++ sepBy i xs
 
 showField : forall {a} -> Field a -> String
 showField {string} s = "'" +++ s +++ "'" --listToString (vecToList s) +++ "'"  -- TODO: escaping
-showField {integer} n = showℤ n
+showField {integer} n = Data.Integer.Show.show n
 
 
 -- New row type without names [later perhaps NamedRows with the n

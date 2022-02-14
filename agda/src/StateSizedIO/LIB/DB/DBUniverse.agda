@@ -5,7 +5,7 @@ open import Function
 open import Data.Bool
 open import Data.String hiding (_==_; show)
 open import Data.Nat renaming (_≟_ to _≟Nat_)
-open import Data.List 
+open import Data.List
 open import Data.Vec
 open import Data.Product
 open import Data.Maybe hiding (maybe)
@@ -14,6 +14,8 @@ open import Relation.Nullary
 open import StateSizedIO.LIB.DB.Schema
 
 open import Relation.Unary as R
+open import Agda.Builtin.String using (primStringEquality)
+open import lib.libraryBool
 
 -- Overloaded equality
 
@@ -46,7 +48,7 @@ _==_ {fieldType} _ _ = false
 _==_ {string} x y = primStringEquality x y
 _==_ {nat} x y with x ≟Nat y
 _==_ {nat} x y | yes p = true
-_==_ {nat} x y | Dec.no ¬p = false
+_==_ {nat} x y | no ¬p = false
 _==_ {bool} false false = true
 _==_ {bool} true true = true
 _==_ {bool} _ _ = false
@@ -72,4 +74,3 @@ show {a} x = "<exercise>"
 nub : {a : Type} -> List (El a) -> List (El a)
 nub [] = []
 nub (x ∷ xs) = x ∷ boolFilter (not ∘ _==_ x) xs
-
